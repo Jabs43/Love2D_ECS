@@ -1,5 +1,15 @@
-require('lib.helperfunctions')
-require('lib.globals')
+---------------------------------
+--[[ Entity Component System ]]--
+---------------------------------
+COMPONENT = {
+    NONE      = 0,  -- No components
+    POSITION  = 1,  -- (bit 0) [00000001]
+    VELOCITY  = 2,  -- (bit 1) [00000010]
+    COLLISION = 4,  -- (bit 2) [00000100]
+    SPRITE    = 8,  -- (bit 3) [00001000]
+    INPUT     = 16, -- (bit 4) [00010000]
+    AI        = 32, -- (bit 5) [00100000]
+}
 ------------------------------
 --- Lua table that holds all ECS data & functions
 local World = {
@@ -250,9 +260,10 @@ function World:ClearAll()
         end
     end
 end
---------------------------------------
---|| COMPONENT DATA MOD FUNCTIONS ||--
---------------------------------------
+
+-------------------------------------------------------
+--|| COMPONENT DATA MODIFICATION/SETTING FUNCTIONS ||--
+-------------------------------------------------------
 
 --- Sets the entity's position 
 --- @param id integer the ID of the entity that you would like to modify
@@ -309,52 +320,9 @@ function World:SetEntitySwim(id, can_swim)
     self.data.Swim.can_swim[id] = can_swim
 end
 
---[[function World:SetEntitySprite(id, img, scale)
+function World:SetEntitySprite(id, img, scale)
     self.data.Sprite.img[id] = img 
     self.data.Sprite.scale[id] = scale 
-end]]
---- Pre-fills entity's component data into FishBodyComponent and then adds the component to entity ID
---- @param id integer The ID of the entity you would like add the fishbody component to 
---- @param x float The entity's current x position used to calculate segment spawn position
---- @param y float The entity's current y position used to calculate segment spawn position 
---- @param _segs integer The number of body segments 
---- @param _seglen float The distance in pixel between segments\
---- @param _bouy float The bouyancy of the body in water 
---- @param _size float The radius(thickness) of the middle segment of the body 
-function World.AddFishBody(id, x, y, _segs, _seglen, _bouy, _size)
-    -- 1. SAFETY CHECK: Don't exceed the MAX_SEGS(200) size limit defined in C-struct
-    local max_segs = 200 
-    if _segs > max_segs then 
-        print("Warning: Fish segments capped at 200.")
-        _segs = max_segs 
-    end
-
-    -- 2. Reference the pre-allocated memory slot 
-    local body = World.data.FishBody.items[id]
-
-
-    -- 3. Initialize the flat arrays (segs, seglen, bouyancy)
-    World.data.FishBody.segs[id] = _segs 
-    World.data.FishBody.seglen[id] = _seglen
-    World.data.FishBody.bouyancy[id] = _bouy or (0.95 * 9.81)
-
-    -- 4. Fill the segment array 
-    -- WARNING: FFI arrays are 0-index!
-    local PI = 3.14 
-    for i = 0, _segs - 1 do 
-        body.rx[i] = x + (i + 1) * _seglen 
-        body.ry[i] = y 
-        body.ru[i] = 0 
-        body.rv[i] = 0 
-        body.nx[i] = body.rx[i]
-        body.ny[i] = body.ry[i]
-        -- Math for the fish taper
-        body.segsize[i] = math.abs(_size * math.sin((PI / _segs) * (i + 1)))
-    end
-
-    -- 5. Register the component in the Archetype system 
-    -- This is what moves the entity into the "FishBody" processing group
-    World.AddComponent(id, COMPONENT.FISHBODY)
 end
 
 return World

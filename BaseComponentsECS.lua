@@ -28,29 +28,6 @@ ffi.cdef[[
     } ControllsComponent;
 
     typedef struct {
-        bool can_swim[MAX_ENTITIES];
-    } SwimComponent;
-
-    // This represents the data for ONE fish
-    typedef struct {
-        float rx[MAX_SEGS];
-        float ry[MAX_SEGS];
-        float ru[MAX_SEGS];
-        float rv[MAX_SEGS];
-        float nx[MAX_SEGS];
-        float ny[MAX_SEGS];
-        float segsize[MAX_SEGS];
-    } FishPhysics;
-
-    // This holds the data for ALL possible fish
-    typedef struct {
-        FishPhysics items[MAX_ENTITIES];
-        int   segs[MAX_ENTITIES];
-        float seglen[MAX_ENTITIES];
-        float bouyancy[MAX_ENTITIES];
-    } FishBodyComponent;
-
-    typedef struct {
         float timer[MAX_ENTITIES];
         float dir[MAX_ENTITIES];
     } AiComponent;
@@ -63,7 +40,5 @@ return {
     RecHitbox = ffi.new("RectangleComponent"),
     Vel       = ffi.new("VelocityComponent"),
     Controlls = ffi.new("ControllsComponent"),
-    Swim      = ffi.new("SwimComponent"),
-    FishBody  = ffi.new("FishBodyComponent"),
     Ai        = ffi.new("AiComponent")
 }

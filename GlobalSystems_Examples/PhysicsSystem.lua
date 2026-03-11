@@ -1,8 +1,8 @@
-require('lib.helperfunctions')
-require('lib.globals')
-local Collision = require('lib.collision')
+require('lib.helperfunctions') 
+require('lib.globals') -- For MAP_BUFFER, MAP_WIDTH constants in tile collision checks
+local Collision = require('lib.collision') -- Example collision module for AABB checks and tilemap queries
 local World = require('lib.ECS')
-local SpatialHash = require('lib.SpatialHash')
+local SpatialHash = require('lib.SpatialHash') -- Example for broad-phase optimization in collision detection
 
 local function is_solid(id, ox, oy)
     -- We pull current values directly from the SoA arrays
