@@ -1,7 +1,10 @@
 local ffi = require("ffi")
 
--- We define the constant in C so it can be used inside the structs
+--[[ Base components for the ECS. 
+     These are the components that will be used by most entities in the game. 
+     They are defined as C structs for performance reasons. ]]
 ffi.cdef[[
+// We define the constant in C so it can be used inside the structs
     enum { MAX_ENTITIES = 10000 };
     enum { MAX_SEGS = 200 };
 
