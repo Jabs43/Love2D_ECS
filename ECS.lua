@@ -314,12 +314,10 @@ function World:SetEntityAi(id, timer, dir)
     self.data.Ai.dir[id] = dir 
 end
 
---- Sets the entity's Swim settings 
---- @param can_swim boolean Sets if entity can swim or not
-function World:SetEntitySwim(id, can_swim)
-    self.data.Swim.can_swim[id] = can_swim
-end
-
+--- Sets the entity's Sprite settings 
+--- @param id integer The ID of the entity that you would like to modify
+--- @param img string The image file path for the sprite
+--- @param scale float The scale of the sprite
 function World:SetEntitySprite(id, img, scale)
     self.data.Sprite.img[id] = img 
     self.data.Sprite.scale[id] = scale 
