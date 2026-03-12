@@ -1,12 +1,12 @@
 # Love2D_ECS
 
-A small general **Entity Component System ( ECS )** framework tailored for Love2D. It uses Bitmasks for fast component filtering and **FFI (Foreign Function Interaface)** for memory-efficient data storage using a Structure of Arrays (SoA) approach.
+A small general **Entity Component System ( ECS )** library tailored for Love2D. It uses Bitmasks for fast component filtering and **FFI (Foreign Function Interaface)** for memory-efficient data storage using a Structure of Arrays (SoA) approach.
 ## 1. Core Concepts
 **Bitmask Signatures**
 Each Component is represented by a bit (power of 2). An entity's "Signature" is a single integer created by bitwise `OR`ing these values. This allows the system to check if an entity has a specific set of components almost instantaneously.
 
 **Archetypes**
-Instaed of iterating through every entity, this framework groups entities with the exact same component signatures into **Archetypes**. This makes system iteration extremely fast.
+Instead of iterating through every entity, this library groups entities with the exact same component signatures into **Archetypes**. This makes system iteration extremely fast.
 
 ## 2. Component Definitions
 The `COMPONENT` table defines the available bits. To combine components, use `bit.bor()`.
