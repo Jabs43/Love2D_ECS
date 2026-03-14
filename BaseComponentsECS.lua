@@ -1,12 +1,10 @@
 local ffi = require("ffi")
 
---[[ Base components for the ECS. 
-     These are the components that will be used by most entities in the game. 
-     They are defined as C structs for performance reasons. ]]
 ffi.cdef[[
 // We define the constant in C so it can be used inside the structs
-    enum { MAX_ENTITIES = 10000 };
+    enum { MAX_ENTITIES = 5000 };
     enum { MAX_SEGS = 200 };
+    enum { MAX_ARCHETYPES = 32 };
 
     typedef struct {
         float x[MAX_ENTITIES];
@@ -34,14 +32,39 @@ ffi.cdef[[
         float timer[MAX_ENTITIES];
         float dir[MAX_ENTITIES];
     } AiComponent;
+
+    typedef struct {
+        PositionComponent Pos;
+        RectangleComponent RecHitbox;
+        VelocityComponent Vel;
+        ControllsComponent Controlls;
+        AiComponent Ai;
+    } ECSData;
+
+    typedef struct {
+        void* add[32]; // Cache for adding components
+        void* remove[32]; // Cache for removing components 
+    } Edges;
+
+    typedef struct {
+        int ids[MAX_ENTITIES];
+        int count;
+        int signature;
+        Edges edges; // Cache for archetypes transitions
+    } Archetype;
+
+    typedef struct {
+        Archetype archetypes[MAX_ARCHETYPES];
+    } ArchetypeTable;
+
+    typedef struct {
+        int signature;
+        int arch_index;
+    } EntityMetadata;
+
+    typedef struct {
+        EntityMetadata entity_metadata[MAX_ENTITIES];
+    } EntityMetadataTable;
 ]]
 
--- Note: We use "MAX_ENTITIES" from the enum defined above
-return {
-    MAX_ENTITIES = 10000,
-    Pos       = ffi.new("PositionComponent"),
-    RecHitbox = ffi.new("RectangleComponent"),
-    Vel       = ffi.new("VelocityComponent"),
-    Controlls = ffi.new("ControllsComponent"),
-    Ai        = ffi.new("AiComponent")
-}
+return ffi.new("ECSData")
